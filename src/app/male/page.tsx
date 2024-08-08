@@ -1,4 +1,4 @@
-import { Mproductsdata } from "@/utilites/data";
+import { Mproductsdata } from "@/utils/data";
 
 import Item from "@/components/item";
 const thisismalepage = () => {

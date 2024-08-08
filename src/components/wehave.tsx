@@ -7,9 +7,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-
+import { ProductType } from "@/types/datatype";
 import Image from "next/image";
-import { Fproductsdata } from "@/utilites/data";
+import { Fproductsdata } from "@/utils/data";
 import Link from "next/link";
 const Cards = () => {
   return (
@@ -27,10 +27,10 @@ const Cards = () => {
             className="w-full max-w-xs sm:max-w-sm md:max-w-xl lg:max-w-lg"
           >
             <CarouselContent>
-              {Fproductsdata.map((product: producttype) => (
+              {Fproductsdata.map((product: ProductType) => (
                 <CarouselItem
                   key={product.id}
-                  className="md:basis-1/2 lg:basis-3/4 xl:basis-1/2 2xl:basis-1/3"
+                  className="md:basis-1/2 lg:basis-3/4 xl:basis-1/2 2xl:basis-3/4"
                 >
                   {" "}
                   <Link href={`/items/${product.id}`}>

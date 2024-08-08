@@ -9,7 +9,6 @@ export default function Home() {
       <div className="px-6">
         <Rightside />
       </div>
-
       <div>
         <Promotions />
       </div>
@@ -22,4 +21,3 @@ export default function Home() {
     </>
   );
 }
-// text-9xl flex justify-center text-transparent bg-clip-text bg-slate-100 absolute z-10

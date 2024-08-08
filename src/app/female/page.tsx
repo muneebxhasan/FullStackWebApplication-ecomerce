@@ -1,4 +1,4 @@
-import { Fproductsdata } from "@/utilites/data";
+import { Fproductsdata } from "@/utils/data";
 import Item from "@/components/item";
 
 const thisisfemalepage = () => {

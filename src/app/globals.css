@@ -83,11 +83,11 @@
 }
 
 .flex-40 {
-  flex: 0 0 50%;
+  flex: 0 0 40%;
 }
 
 .flex-60 {
-  flex: 0 0 50%;
+  flex: 0 0 55%;
 }
 .bg-pattern-image {
   background-image: url(/Featured3.webp);
@@ -124,3 +124,20 @@
 .size-list-item:hover {
   box-shadow: 0 0 15px rgba(75, 73, 73, 0.97);
 }
+
+.glow-on-hover {
+  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+/* .size-list-item {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.size-list-item:hover {
+  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+}
+
+.glow {
+  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+} */

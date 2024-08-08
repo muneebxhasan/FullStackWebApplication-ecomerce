@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 const Rightside = () => {
   return (
     <>
-      <div className="flex flex-row ">
-        <div className="flex-60 py-8 px-20">
-          <span className="bg-slate-200 text-lg w-20 p-2 rounded-lg">
+      <div className="flex flex-row py-4 ">
+        <div className="flex-40 py-8 px-20 md:px-10">
+          <span className="bg-gray-100 text-lg w-20 p-2 rounded-lg">
             Sale 69%
           </span>
           <h1 className="flex scroll-m-20 text-3xl font-bold font-sans tracking-tight lg:text-5xl py-4">
@@ -29,7 +29,7 @@ const Rightside = () => {
             <Image src="/Featured4.webp" width={98} height={100} alt="Logo" />
           </div>
         </div>
-        <div className="flex-40">
+        <div className="flex-60 hide-mobile flex flex-auto">
           <div className="flex justify-end rounded-full bg-orange-50">
             <Image
               src="/header.webp"
