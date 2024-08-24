@@ -120,16 +120,16 @@ const Promotions = () => {
           <Image
             src="/event2.webp"
             alt="Image"
-            width={200}
+            width={150}
             height={0}
-            className="w-full h-auto bg-orange-100"
+            className="w-3/6 h-auto bg-orange-100"
           />
           <Image
             src="/event2.webp"
             alt="Image"
-            width={200}
+            width={150}
             height={0}
-            className="w-full h-auto bg-gray-200"
+            className="w-3/6 h-auto bg-gray-200  hide-mobile"
           />
         </div>
       </div>

@@ -3,7 +3,7 @@
 
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "@/store/store";
+import { RootState, AppDispatch } from "@/store/strore";
 import { CartActions } from "@/store/slice/cartSlice";
 import { CartProduct } from "@/types/datatype";
 import Image from "next/image";
@@ -17,8 +17,16 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import StripeCheckOutButton from "@/components/Checkout";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-const Cart: React.FC = () => {
+const Cart = () => {
   const dispatch: AppDispatch = useDispatch();
   const products = useSelector((state: RootState) => state.cartSlice.products);
 
@@ -39,12 +47,12 @@ const Cart: React.FC = () => {
   };
 
   const totalQuantity = products.reduce(
-    (total: number, product: CartProduct) => total + product.quantity,
+    (total: number, product: CartProduct) => total + (product.quantity ?? 0),
     0,
   );
   const totalPrice = products.reduce((total: number, product: CartProduct) => {
-    const price = parseFloat(product.price.replace(/[^0-9.-]+/g, ""));
-    return total + price * product.quantity;
+    const price = parseFloat((product.price ?? "0").replace(/[^0-9.-]+/g, ""));
+    return total + price * (product.quantity ?? 0);
   }, 0);
   return (
     <div className="container mx-auto p-4 flex flex-col md:flex-row md:space-x-6">
@@ -54,25 +62,44 @@ const Cart: React.FC = () => {
             <p>Your cart is currently empty.</p>
           </div>
         ) : (
-          products.map((product: CartProduct) => (
-            <Card
-              key={product.id}
-              className="w-full border border-gray-200 rounded-lg shadow-md"
-            >
-              <CardContent className="flex flex-col md:flex-row items-center p-4">
-                <img
-                  src={product.src}
-                  alt={product.name}
-                  className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-lg"
-                />
-                <div className="mt-4 md:mt-0 md:ml-4 flex-1 text-center md:text-left">
-                  <div className="text-xl font-semibold">{product.name}</div>
-                  <div className="text-gray-600">{product.clothType}</div>
-                  <p className="text-lg font-semibold mt-2">{product.price}</p>
-                  <div className="flex flex-col gap-2 items-center md:items-start mt-4">
-                    <div className="flex items-center space-x-2">
+          <Table className="w-full border border-gray-200 rounded-lg shadow-md">
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-left">Product</TableHead>
+                <TableHead className="text-left">Type</TableHead>
+                <TableHead className="text-left">Price</TableHead>
+                <TableHead className="text-center">Quantity</TableHead>
+                <TableHead className="text-center">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {products.map((product) => (
+                <TableRow key={product.id} className="border-t">
+                  <TableCell className="flex items-center">
+                    <Image
+                      src={String(product.images[0])}
+                      alt={product.name || "Product Image"}
+                      width={100}
+                      height={100}
+                      className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-lg"
+                    />
+                    <div className="ml-4">
+                      <div className="text-xl font-semibold">
+                        {product.name}
+                      </div>
+                      <div className="text-gray-600">{product.clothType}</div>
+                    </div>
+                  </TableCell>
+                  <TableCell>{product.clothType}</TableCell>
+                  <TableCell className="text-lg font-semibold">
+                    ${product.price}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <div className="flex items-center justify-center space-x-2">
                       <Button
                         onClick={() =>
+                          product.id &&
+                          product.size &&
                           handleDecrement(product.id, product.size)
                         }
                         variant="outline"
@@ -83,6 +110,8 @@ const Cart: React.FC = () => {
                       <span className="text-lg">{product.quantity}</span>
                       <Button
                         onClick={() =>
+                          product.id &&
+                          product.size &&
                           handleIncrement(product.id, product.size)
                         }
                         variant="outline"
@@ -91,18 +120,24 @@ const Cart: React.FC = () => {
                         +
                       </Button>
                     </div>
+                  </TableCell>
+                  <TableCell className="text-center">
                     <Button
-                      onClick={() => handleRemove(product.id, product.size)}
+                      onClick={() =>
+                        product.id &&
+                        product.size &&
+                        handleRemove(product.id, product.size)
+                      }
                       variant="outline"
-                      className="w-full md:w-auto px-4 py-1 mt-2"
+                      className="w-full md:w-auto px-4 py-1"
                     >
                       Remove
                     </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         )}
       </div>
       <div className="w-full md:w-[350px] mt-6 md:mt-0">
@@ -120,7 +155,7 @@ const Cart: React.FC = () => {
               <div className="flex flex-col justify-between items-center mt-4">
                 <Button
                   onClick={handleClearCart}
-                  className="w-full bg-red-500 text-white hover:bg-red-600 px-4 py-2"
+                  className="w-full bg-gray-500 text-white hover:bg-gray-600 px-4 py-2"
                 >
                   Clear Cart
                 </Button>

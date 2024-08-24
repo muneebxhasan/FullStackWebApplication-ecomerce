@@ -6,7 +6,7 @@ import Newsletter from "@/components/newsletter";
 export default function Home() {
   return (
     <>
-      <div className="px-6">
+      <div>
         <Rightside />
       </div>
       <div>

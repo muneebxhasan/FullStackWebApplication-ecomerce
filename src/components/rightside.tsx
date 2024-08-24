@@ -7,7 +7,7 @@ const Rightside = () => {
   return (
     <>
       <div className="flex flex-row py-4 ">
-        <div className="flex-40 py-8 px-20 md:px-10">
+        <div className="flex-40  py-8 px-20 md:px-6 sm:px-3 ">
           <span className="bg-gray-100 text-lg w-20 p-2 rounded-lg">
             Sale 69%
           </span>
@@ -29,6 +29,7 @@ const Rightside = () => {
             <Image src="/Featured4.webp" width={98} height={100} alt="Logo" />
           </div>
         </div>
+
         <div className="flex-60 hide-mobile flex flex-auto">
           <div className="flex justify-end rounded-full bg-orange-50">
             <Image

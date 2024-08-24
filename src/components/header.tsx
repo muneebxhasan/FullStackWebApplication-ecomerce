@@ -4,25 +4,18 @@ import { Input } from "@/components/ui/input";
 import { IoCartOutline } from "react-icons/io5";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/strore";
-
 import { FiAlignRight } from "react-icons/fi";
 
 const Navbar = () => {
   const totalQuantity = useSelector(
     (state: RootState) => state.cartSlice.totalQuantity,
   );
+
   return (
-    <header className="flex justify-evenly items-center p-7 bg-gray-100 border ">
+    <header className="fixed top-0 left-0 right-0 z-50 flex justify-evenly items-center p-7 bg-gray-100 border shadow-md h-10">
       <Link href={"/"}>
         <Image
           src="/Logo.webp"
@@ -39,9 +32,6 @@ const Navbar = () => {
       <Link href={"/male"} className="hidden sm:block">
         Male
       </Link>
-      {/* <Link href={"/kid"} className="hidden sm:block">
-        Kid
-      </Link> */}
 
       <Input
         className="w-30 h-6 hidden sm:block"
@@ -51,7 +41,7 @@ const Navbar = () => {
       <Link href="/cart" className="hidden sm:block relative">
         <div className="relative">
           <IoCartOutline
-            size={30}
+            size={24}
             className="ring-2 ring-gray-300 rounded-full"
           />
           {totalQuantity > 0 && (

@@ -22,11 +22,17 @@ export const cartSlice = createSlice({
         (item) => item.id === product.id && item.size === product.size,
       );
       if (existingProduct) {
-        existingProduct.quantity += product.quantity;
+        if (existingProduct.quantity != null) {
+          if (product.quantity != null) {
+            existingProduct.quantity += product.quantity;
+          }
+        }
       } else {
         state.products.push(product);
       }
-      state.totalQuantity += product.quantity;
+      if (product.quantity != null) {
+        state.totalQuantity += product.quantity;
+      }
     },
     incrementProduct: (
       state,
@@ -37,7 +43,9 @@ export const cartSlice = createSlice({
         (item) => item.id === id && item.size === size,
       );
       if (existingProduct) {
-        existingProduct.quantity += 1;
+        if (existingProduct?.quantity != null) {
+          existingProduct.quantity += 1;
+        }
         state.totalQuantity += 1;
       }
     },
@@ -50,14 +58,16 @@ export const cartSlice = createSlice({
         (item) => item.id === id && item.size === size,
       );
       if (existingProduct) {
-        if (existingProduct.quantity > 1) {
+        if (existingProduct?.quantity != null && existingProduct.quantity > 1) {
           existingProduct.quantity -= 1;
           state.totalQuantity -= 1;
         } else {
           state.products = state.products.filter(
             (product) => !(product.id === id && product.size === size),
           );
-          state.totalQuantity -= existingProduct.quantity;
+          if (existingProduct.quantity != null) {
+            state.totalQuantity -= existingProduct.quantity;
+          }
         }
       }
     },
@@ -70,7 +80,9 @@ export const cartSlice = createSlice({
         (item) => item.id === id && item.size === size,
       );
       if (existingProduct) {
-        state.totalQuantity -= existingProduct.quantity;
+        if (existingProduct.quantity != null) {
+          state.totalQuantity -= existingProduct.quantity;
+        }
         state.products = state.products.filter(
           (product) => !(product.id === id && product.size === size),
         );
