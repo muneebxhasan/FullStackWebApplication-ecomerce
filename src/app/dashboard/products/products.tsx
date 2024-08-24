@@ -14,6 +14,7 @@ import Image from "next/image";
 import { GETProductResponse } from "@/types/datatype";
 import UpdateProduct from "@/components/updateproduct";
 import UploadProduct from "@/components/upload";
+import Link from "next/link";
 
 function ProductList({ initialProducts }: any) {
   const [products, setProducts] = useState<GETProductResponse[]>(
@@ -86,7 +87,14 @@ function ProductList({ initialProducts }: any) {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-2">Products</h1>
+      <div className="flex flex-row gap-2">
+        <Link href={"/dashboard"}>
+          <h1 className="text-2xl font-bold mb-2">Dashboard</h1>
+        </Link>
+        {">"}
+        <h1 className="text-2xl font-bold mb-2">Products</h1>
+      </div>
+
       <h2 className="text-lg text-gray-600 mb-4">
         Manage your products and view their details.
       </h2>
@@ -98,7 +106,6 @@ function ProductList({ initialProducts }: any) {
           Add Product
         </Button>
       </div>
-
       <Table>
         <TableHeader>
           <TableRow>
@@ -168,11 +175,9 @@ function ProductList({ initialProducts }: any) {
           </TableBody>
         )}
       </Table>
-
       <div className="text-xs text-muted-foreground mt-4">
         Showing <strong>{products.length}</strong> products
       </div>
-
       {selectedProduct && (
         <UpdateProduct
           product={selectedProduct}

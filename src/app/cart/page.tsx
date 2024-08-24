@@ -1,20 +1,12 @@
-// components/Cart.tsx
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/store/strore";
 import { CartActions } from "@/store/slice/cartSlice";
 import { CartProduct } from "@/types/datatype";
 import Image from "next/image";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import StripeCheckOutButton from "@/components/Checkout";
 import {
@@ -29,6 +21,15 @@ import {
 const Cart = () => {
   const dispatch: AppDispatch = useDispatch();
   const products = useSelector((state: RootState) => state.cartSlice.products);
+
+  // Load cart from localStorage on component mount
+  useEffect(() => {
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) {
+      const parsedCart = JSON.parse(storedCart);
+      dispatch(CartActions.setCart(parsedCart));
+    }
+  }, [dispatch]);
 
   const handleRemove = (id: number, size: string) => {
     dispatch(CartActions.removeProduct({ id, size }));
@@ -50,10 +51,12 @@ const Cart = () => {
     (total: number, product: CartProduct) => total + (product.quantity ?? 0),
     0,
   );
+
   const totalPrice = products.reduce((total: number, product: CartProduct) => {
     const price = parseFloat((product.price ?? "0").replace(/[^0-9.-]+/g, ""));
     return total + price * (product.quantity ?? 0);
   }, 0);
+
   return (
     <div className="container mx-auto p-4 flex flex-col md:flex-row md:space-x-6">
       <div className="flex-1 space-y-6">
@@ -73,7 +76,7 @@ const Cart = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {products.map((product) => (
+              {products.map((product: any) => (
                 <TableRow key={product.id} className="border-t">
                   <TableCell className="flex items-center">
                     <Image

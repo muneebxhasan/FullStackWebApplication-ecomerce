@@ -51,26 +51,12 @@ const Navbar = () => {
           )}
         </div>
       </Link>
+
       <Sheet>
         <SheetTrigger className="lg:hidden">
           <FiAlignRight />
         </SheetTrigger>
         <SheetContent className="flex flex-col p-20 lg:hidden">
-          <Link href={"/female"}>
-            <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-              <SheetTrigger>Female</SheetTrigger>
-            </h4>
-          </Link>
-          <Link href={"/male"}>
-            <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-              <SheetTrigger>Male </SheetTrigger>
-            </h4>
-          </Link>
-          <Link href={"/kid"}>
-            <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-              <SheetTrigger>Kid</SheetTrigger>
-            </h4>
-          </Link>
           <Link href="/cart" className="hidden sm:block relative">
             <div className="relative">
               <IoCartOutline
@@ -83,6 +69,23 @@ const Navbar = () => {
                 </span>
               )}
             </div>
+          </Link>
+          <Link href={"/female"}>
+            <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+              <SheetTrigger>Female</SheetTrigger>
+            </h4>
+          </Link>
+          <Link href={"/male"}>
+            <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+              <SheetTrigger>Male </SheetTrigger>
+            </h4>
+          </Link>
+
+          <Link
+            href={`/track`}
+            className="text-gray-600 hover:text-gray-800 cursor-pointer"
+          >
+            Track order
           </Link>
         </SheetContent>
       </Sheet>

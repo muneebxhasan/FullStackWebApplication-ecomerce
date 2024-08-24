@@ -116,13 +116,13 @@ const Promotions = () => {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 ">
           <Image
             src="/event2.webp"
             alt="Image"
             width={150}
             height={0}
-            className="w-3/6 h-auto bg-orange-100"
+            className="w-3/6 h-auto bg-orange-100 hide-mobile"
           />
           <Image
             src="/event2.webp"

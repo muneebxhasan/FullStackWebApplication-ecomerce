@@ -26,6 +26,7 @@ import {
   DialogDescription,
   DialogClose,
 } from "@/components/ui/dialog"; // Import Dialog components
+import Link from "next/link";
 
 // Define the type for Order based on your updated database schema
 type OrderType = {
@@ -125,11 +126,16 @@ function OrderList() {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Orders</h1>
+      <div className="flex flex-row gap-2">
+        <Link href={"/dashboard"}>
+          <h1 className="text-2xl font-bold mb-2">Dashboard</h1>
+        </Link>
+        {">"}
+        <h1 className="text-2xl font-bold mb-2">Orders</h1>
+      </div>
       <Button onClick={fetchOrders} className="w-32 mb-6">
         Refresh Orders
       </Button>
-
       <Table className="w-full bg-white rounded-lg shadow-md">
         <TableHeader>
           <TableRow>

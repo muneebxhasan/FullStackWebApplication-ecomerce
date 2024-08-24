@@ -1,6 +1,5 @@
-// store/slice/cartSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ProductType, CartProduct } from "@/types/datatype";
+import { CartProduct } from "@/types/datatype";
 
 export interface CartState {
   products: CartProduct[];
@@ -16,23 +15,26 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    setCart: (state, action: PayloadAction<CartProduct[]>) => {
+      state.products = action.payload;
+      state.totalQuantity = action.payload.reduce(
+        (total, product) => total + (product.quantity ?? 0),
+        0,
+      );
+    },
     addProduct: (state, action: PayloadAction<CartProduct>) => {
       const product = action.payload;
       const existingProduct = state.products.find(
         (item) => item.id === product.id && item.size === product.size,
       );
       if (existingProduct) {
-        if (existingProduct.quantity != null) {
-          if (product.quantity != null) {
-            existingProduct.quantity += product.quantity;
-          }
-        }
+        existingProduct.quantity =
+          (existingProduct.quantity ?? 0) + (product.quantity ?? 0);
       } else {
         state.products.push(product);
       }
-      if (product.quantity != null) {
-        state.totalQuantity += product.quantity;
-      }
+      state.totalQuantity += product.quantity ?? 0;
+      localStorage.setItem("cart", JSON.stringify(state.products)); // Save to localStorage
     },
     incrementProduct: (
       state,
@@ -43,10 +45,9 @@ export const cartSlice = createSlice({
         (item) => item.id === id && item.size === size,
       );
       if (existingProduct) {
-        if (existingProduct?.quantity != null) {
-          existingProduct.quantity += 1;
-        }
+        existingProduct.quantity = (existingProduct.quantity ?? 0) + 1;
         state.totalQuantity += 1;
+        localStorage.setItem("cart", JSON.stringify(state.products)); // Save to localStorage
       }
     },
     decrementProduct: (
@@ -58,17 +59,16 @@ export const cartSlice = createSlice({
         (item) => item.id === id && item.size === size,
       );
       if (existingProduct) {
-        if (existingProduct?.quantity != null && existingProduct.quantity > 1) {
-          existingProduct.quantity -= 1;
+        if (existingProduct?.quantity ?? 0 > 1) {
+          existingProduct.quantity! -= 1;
           state.totalQuantity -= 1;
         } else {
           state.products = state.products.filter(
             (product) => !(product.id === id && product.size === size),
           );
-          if (existingProduct.quantity != null) {
-            state.totalQuantity -= existingProduct.quantity;
-          }
+          state.totalQuantity -= 1;
         }
+        localStorage.setItem("cart", JSON.stringify(state.products)); // Save to localStorage
       }
     },
     removeProduct: (
@@ -80,17 +80,17 @@ export const cartSlice = createSlice({
         (item) => item.id === id && item.size === size,
       );
       if (existingProduct) {
-        if (existingProduct.quantity != null) {
-          state.totalQuantity -= existingProduct.quantity;
-        }
+        state.totalQuantity -= existingProduct.quantity ?? 0;
         state.products = state.products.filter(
           (product) => !(product.id === id && product.size === size),
         );
+        localStorage.setItem("cart", JSON.stringify(state.products)); // Save to localStorage
       }
     },
     clearCart: (state) => {
       state.products = [];
       state.totalQuantity = 0;
+      localStorage.removeItem("cart"); // Clear from localStorage
     },
   },
 });

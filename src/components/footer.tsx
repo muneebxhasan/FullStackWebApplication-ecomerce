@@ -69,6 +69,14 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
+                  <Link
+                    href={`/track`}
+                    className="text-gray-600 hover:text-gray-800 cursor-pointer"
+                  >
+                    Track order
+                  </Link>
+                </li>
+                <li>
                   <a className="text-gray-600 hover:text-gray-800 cursor-pointer">
                     Feedback
                   </a>
@@ -90,6 +98,8 @@ const Footer = () => {
                 Developers
               </h2>
               <nav className="list-none mb-10 flex flex-col space-y-3 text-sm font-normal">
+                <Link href={"/dashboard"}>dashboard</Link>
+
                 <li>
                   <a className="text-gray-600 hover:text-gray-800 cursor-pointer">
                     Documentation

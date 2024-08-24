@@ -1,14 +1,21 @@
 import Item from "@/components/item";
 import { GETProductResponse } from "@/types/datatype";
+import { headers } from "next/headers"; // Only available in Next.js 13+ App directory
 
 const thisisfemalepage = async () => {
-  const baseURL =
-    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
-  const response = await fetch(`${baseURL}/api/product?gender=female`, {
+  const headersList = headers();
+  const host = headersList.get("host");
+  const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+
+  // Construct the full URL when running on the server
+  const baseUrl = typeof window === "undefined" ? `${protocol}://${host}` : "";
+
+  const response = await fetch(`${baseUrl}/api/product?gender=female`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
+
     next: {
       revalidate: 1000,
     },

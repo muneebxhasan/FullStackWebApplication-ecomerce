@@ -3,40 +3,37 @@
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-interface SessionData {
+interface OrderData {
   id: string;
-  amount_total: number;
+  amountTotal: number;
   currency: string;
-  payment_status: string;
-  customer_details: {
-    name: string;
-    email: string;
-    phone: string;
-  };
-  shipping_details: {
+  paymentStatus: string;
+  orderStatus: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  shippingAddress: {
     address: {
       line1: string;
+      line2: string | null;
       city: string;
-      state: string;
-      postal_code: string;
+      state: string | null;
+      postal_code: string | null;
       country: string;
     };
   };
-  created: number;
-  line_items: {
-    data: Array<{
-      id: string;
-      description: string;
-      quantity: number;
-      amount_total: number;
-    }>;
-  };
+  created: string;
+  items: Array<{
+    description: string;
+    quantity: number;
+    itemTotal: number;
+  }>;
 }
 
 const SuccessPageContent = () => {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
-  const [session, setSession] = useState<SessionData | null>(null);
+  const [order, setOrder] = useState<OrderData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -47,31 +44,24 @@ const SuccessPageContent = () => {
       return;
     }
 
-    const fetchSession = async () => {
-      // Check if session data exists in sessionStorage
-      const storedSession = sessionStorage.getItem(sessionId);
+    const fetchOrder = async () => {
+      const storedOrderId = sessionStorage.getItem("orderId");
 
-      if (storedSession) {
-        setSession(JSON.parse(storedSession));
-        setLoading(false);
-      } else {
+      if (storedOrderId) {
         try {
-          const response = await fetch(
-            `/api/get-checkout-session?session_id=${sessionId}`,
-          );
+          const response = await fetch(`/api/order?id=${storedOrderId}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
 
           if (!response.ok) {
-            throw new Error("Failed to fetch session data");
+            throw new Error("Failed to fetch order data");
           }
 
-          const data: SessionData = await response.json();
-          setSession(data);
-
-          // Store session data in sessionStorage to prevent refetching
-          sessionStorage.setItem(sessionId, JSON.stringify(data));
-
-          // Call the API to save the order in the database
-          await saveOrder(data);
+          const orderData: OrderData = await response.json();
+          setOrder(orderData);
         } catch (error: any) {
           setError(error.message);
         } finally {
@@ -80,39 +70,7 @@ const SuccessPageContent = () => {
       }
     };
 
-    const saveOrder = async (sessionData: SessionData) => {
-      try {
-        const response = await fetch("/api/order", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            sessionId: sessionData.id,
-            amountTotal: sessionData.amount_total,
-            currency: sessionData.currency,
-            paymentStatus: sessionData.payment_status,
-            customerDetails: sessionData.customer_details,
-            shippingDetails: sessionData.shipping_details,
-            items: sessionData.line_items.data.map((item) => ({
-              description: item.description,
-              quantity: item.quantity,
-              itemTotal: item.amount_total,
-            })),
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to save order");
-        }
-
-        console.log("Order saved successfully");
-      } catch (error: any) {
-        console.error("Error saving order:", error.message);
-      }
-    };
-
-    fetchSession();
+    fetchOrder();
   }, [sessionId]);
 
   if (loading) {
@@ -123,20 +81,24 @@ const SuccessPageContent = () => {
     return <div>Error: {error}</div>;
   }
 
-  if (!session) {
-    return <div>No session data found</div>;
+  if (!order) {
+    return <div>No order data found</div>;
   }
 
   const {
     id,
-    amount_total,
+    amountTotal,
     currency,
-    customer_details,
-    payment_status,
-    shipping_details,
+    customerName,
+    customerEmail,
+    customerPhone,
+    paymentStatus,
+    shippingAddress,
     created,
-    line_items,
-  } = session;
+    items,
+  } = order;
+
+  const orderDate = new Date(created).toLocaleString();
 
   return (
     <div>
@@ -145,32 +107,40 @@ const SuccessPageContent = () => {
       <h2>Order Details</h2>
       <p>Order ID: {id}</p>
       <p>
-        Amount Paid: ${(amount_total / 100).toFixed(2)} {currency.toUpperCase()}
+        Amount Paid: ${(amountTotal / 100).toFixed(2)} {currency.toUpperCase()}
       </p>
-      <p>Payment Status: {payment_status}</p>
-      <p>Order Date: {new Date(created * 1000).toLocaleString()}</p>
+      <p>Payment Status: {paymentStatus}</p>
+      <p>Order Date: {orderDate}</p>
 
       <h3>Items:</h3>
       <ul>
-        {line_items.data.map((item) => (
-          <li key={item.id}>
+        {items.map((item, index) => (
+          <li key={index}>
             {item.description} - {item.quantity} x $
-            {(item.amount_total / 100).toFixed(2)} {currency.toUpperCase()}
+            {(item.itemTotal / 100).toFixed(2)} {currency.toUpperCase()}
           </li>
         ))}
       </ul>
       <hr />
       <h2>Customer Details</h2>
-      <p>Name: {customer_details?.name}</p>
-      <p>Email: {customer_details?.email}</p>
-      <p>Phone: {customer_details?.phone}</p>
+      <p>Name: {customerName || "N/A"}</p>
+      <p>Email: {customerEmail || "N/A"}</p>
+      <p>Phone: {customerPhone || "N/A"}</p>
 
       <h2>Shipping Details</h2>
       <p>
-        Address: {shipping_details?.address?.line1},{" "}
-        {shipping_details?.address?.city}, {shipping_details?.address?.state},{" "}
-        {shipping_details?.address?.postal_code},{" "}
-        {shipping_details?.address?.country}
+        Address: {shippingAddress.address.line1},{" "}
+        {shippingAddress.address.line2
+          ? `${shippingAddress.address.line2}, `
+          : ""}
+        {shippingAddress.address.city},{" "}
+        {shippingAddress.address.state
+          ? `${shippingAddress.address.state}, `
+          : ""}
+        {shippingAddress.address.postal_code
+          ? `${shippingAddress.address.postal_code}, `
+          : ""}
+        {shippingAddress.address.country}
       </p>
     </div>
   );

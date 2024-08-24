@@ -10,19 +10,25 @@ import {
 import { GETProductResponse } from "@/types/datatype";
 import Image from "next/image";
 import Link from "next/link";
+// import { headers } from "next/headers";
 
 const Cards = () => {
   const [products, setProducts] = useState<GETProductResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  // const headersList = headers();
+  // const host = headersList.get("host");
+  // const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+
+  // Construct the full URL when running on the server
 
   useEffect(() => {
     if (products.length === 0) {
       // Only fetch products if not already loaded
       const fetchProducts = async () => {
-        const baseURL =
-          process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+        // const baseUrl =
+        //   typeof window === "undefined" ? `${protocol}://${host}` : "";
         try {
-          const response = await fetch(`${baseURL}/api/product`, {
+          const response = await fetch(`/api/product`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",

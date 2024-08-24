@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import db, { Order } from "@/lib/db";
 import { ensureTablesExist } from "@/lib/db";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
   try {
@@ -49,13 +49,23 @@ export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url);
     const orderId = url.searchParams.get("id");
+    let phoneNumber = url.searchParams.get("phone");
 
-    if (orderId) {
-      // Fetch a specific order by ID
+    console.log("orderId", orderId);
+    console.log("phoneNumber", phoneNumber);
+    phoneNumber = "+" + phoneNumber;
+    console.log("phoneNumber", phoneNumber);
+    if (orderId && phoneNumber) {
+      // Fetch a specific order by ID and phone number
       const [order] = await db
         .select()
         .from(Order)
-        .where(eq(Order.id, Number(orderId)));
+        .where(
+          and(
+            eq(Order.id, Number(orderId)),
+            eq(Order.customerPhone, phoneNumber),
+          ),
+        );
 
       if (!order) {
         return new NextResponse("Order not found", { status: 404 });
@@ -63,7 +73,7 @@ export async function GET(req: NextRequest) {
 
       return NextResponse.json(order);
     } else {
-      // Fetch all orders
+      // If no specific order is requested, fetch all orders
       const orders = await db.select().from(Order);
       return NextResponse.json(orders);
     }
