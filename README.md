@@ -1,3 +1,27 @@
+Website Design Case Study: Dine Market
+Mission: To build a modern e-commerce platform providing a premium shopping experience for high-quality, artisan clothing.
+Scope of Work: Custom website design and development with full product and order management.
+Pages Included:
+Home: Showcases top products and promotions.
+Product Pages: Detailed info, size options, and sleek images.
+Cart & Checkout: Integrated with Stripe for secure payments.
+Admin Dashboard: Efficient tools for product and order management.
+Admin Dashboard:
+Order Management: Track and update order statuses in real time.
+Product Management: Easily add, edit, or remove products, complete with image uploads and pricing updates.
+User-Friendly Interface: Designed for simplicity to streamline inventory and order tracking.
+
+checkout at [Dinemarket](https://dinemarket-eta.vercel.app/)
+
+![image](https://github.com/user-attachments/assets/ba34df1f-0c5d-4d9b-b749-42586b0769a5)
+![image](https://github.com/user-attachments/assets/ce7a59c6-3b11-4c7a-975a-f3d0dbd30ab2)
+![image](https://github.com/user-attachments/assets/ce9ec4c7-4969-44f8-9e36-c1be066704bd)
+![image](https://github.com/user-attachments/assets/67cda8e6-5719-430a-96b5-049d20417dae)
+![image](https://github.com/user-attachments/assets/ab0fbedc-7dfb-41c1-a873-5c744f833bb2)
+![image](https://github.com/user-attachments/assets/32701500-d349-478a-a19c-eb8b5fffb508)
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
@@ -6,12 +30,9 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
+or
 pnpm dev
-# or
-bun dev
+
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
